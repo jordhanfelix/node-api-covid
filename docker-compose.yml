@@ -1,0 +1,58 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+#criando mongo (DataBase)
+  mongo:
+    image: mongo
+    restart: always
+	container_name: mongo-trabalho-web
+    ports: 
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+	networks: 
+	  - rede-trabalho-web
+
+	  
+#criando mongo (MongoExpress)
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    container_name: mongo-express-trabalho-web
+    networks:
+      - rede-trabalho-web
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+	  ME_CONFIG_MONGODB_SERVER: mongo-trabalho-web
+	depends_on:
+      - mongodb
+	  
+      # * backend
+  backend:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./backend
+    volumes:
+      - './backend:/usr/app/'
+      - './backend/package.json:/usr/app/package.json'
+      - './backend/yarn.lock:/usr/app/yarn.lock'
+    image: node
+    container_name: trabalho-c1-backend
+    ports:
+      - "3000:3000"
+    networks: 
+      - rede-trabalho-web
+    depends_on: 
+      - "mongodb"
+
+# * rede
+networks:
+  rede-trabalho-web:
+    driver: bridge
