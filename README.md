@@ -16,46 +16,53 @@ API para permitir que servidores cadastrem unidades de saúde e pessoas façam s
 * Github
  
  
-## Ruby Gems
-...
- 
-## Getting started
- 
-* To install gems:
+## DOCKER
+
+* Acessar projeto e executar o seguinte comando no terminal: 
+
+- build:
+>    $ docker-compose build
+
+- containers:
 >    $ bundle install
-* To create the bank and do as migrations:
->    $ rake db:create db:migrate db:seed
-* To run the project:
->    $ rails s
  
-## How to use
+* Após rodar os comandos o servidor fica disponivel na porta http://localhost:3000
+
+
+## Iniciando
  
-Here will be the images and descriptions. Principal content.
+* Acessar pasta backend e rodar um dos comandos abaixo, assim será instalado os pacotes do node_modules:
+- utilizando YARN
+>    $ yarn install 
+    
+- utilizando NPM
+>    $ npm install 
+
+* Iniciar Projeto
+
+>    $ yarn start 
  
+## Como usar
  
-## Features
- 
-  - Here will be the features.
- 
+* Rotas disponiveis:
+
  
 ## Links
  
-  - Link of deployed application: (if has been deployed)
-  - Repository: https://link_of_repository
-    - In case of sensitive bugs like security vulnerabilities, please contact
-      YOUR EMAIL directly instead of using issue tracker. We value your effort
-      to improve the security and privacy of this project!
+  - Link de inspiração do projeto
+  - Repository: https://ava.faesa.br/d2l/login?target=%2fcontent%2fenforced%2f60585-2021_1_D001508_CI-1014-192-4DC2%2fProjeto+Pr%c3%a1tico+da+C1.html&sessionExpired=0
+   
  
  
-## Versioning
+## Versão
  
 1.0.0.0
  
  
-## Authors
+## Autor
  
-* **YOUR NAME**: @YOUR_GITHUB_NICKNAME (https://github.com/YOUR_GITHUB_NICKNAME)
+* **Jordhan Félix**: @JordhanFelix (https://github.com/JordhanFelixE)
  
  
-Please follow github and join us!
-Thanks to visiting me and good coding!
+Siga-me no github!
+Obrigado por visualizar o projeto!
