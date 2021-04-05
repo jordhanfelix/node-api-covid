@@ -43,14 +43,7 @@
  
 * Rotas disponiveis:
 
- 
-## Links
- 
-  - Link de inspiração do projeto
-  - Repository: https://ava.faesa.br/d2l/login?target=%2fcontent%2fenforced%2f60585-2021_1_D001508_CI-1014-192-4DC2%2fProjeto+Pr%c3%a1tico+da+C1.html&sessionExpired=0
-   
- 
- 
+
 ## Versão
  
 1.0.0.0
