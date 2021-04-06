@@ -51,7 +51,7 @@
  
 ## Autor
  
-* **Jordhan Félix**: @JordhanFelix (https://github.com/JordhanFelixE)
+* **Jordhan Félix**: @JordhanFelix (https://github.com/JordhanFelix)
  
  
 Siga-me no github!
