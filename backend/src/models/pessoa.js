@@ -7,7 +7,8 @@ const pessoaSchema = mongoose.Schema({
     },
     cpf_pessoa: {
         type: mongoose.Schema.Types.String,
-        required: true
+        required: true,
+        unique: true
     },
     data_nascimento: {
         type: mongoose.Schema.Types.String,
@@ -27,12 +28,19 @@ const pessoaSchema = mongoose.Schema({
     },
     email_pessoa: {
         type: mongoose.Schema.Types.String,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true
     },
+    unidade: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'unidade',
+        required: true
+    }
 });
 
 let Pessoa = module.exports = mongoose.model('pessoa', pessoaSchema);
 
-module.exports.get = function(callback, limit){
+module.exports.get = function (callback, limit) {
     Pessoa.find(callback).limit(limit);
 }

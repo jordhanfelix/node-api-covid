@@ -3,31 +3,29 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
-// const routes = require('./routes/routes')
+const routes = require('./routes/routes')
 
 const port = 3000;
 
-app.get('/' , function(req, resp){
- resp.send('funciona fsdfsdf?');
-});
-// app.use(bodyParser.urlencoded({
-//     extended: true
-// }));
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
-// // criando banco com o nome: mongo-trabalho-web
-// mongoose.connect(
-//     `mongodb://root:exemple@mongo-trabalho-web:27017/devwebII?authSource=admin`,
-//     {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true
-//     });
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-// mongoose.connection.on('error', console.error.bind(console, 'Erro ao conectar no Mongo'));
-// mongoose.connection.once('open', () => console.log("Banco de Dados Mongo conectado com sucesso"));
+// criando banco com o nome: mongo-trabalho-web
+mongoose.connect(
+  `mongodb://root:faesa123@mongo-trabalho-c1:27017/devwebII?authSource=admin`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 
-// // Configura o arquivo de rotas
-// app.use(routes);
+mongoose.connection.on('error', console.error.bind(console, 'Erro ao conectar no Mongo'));
+mongoose.connection.once('open', () => console.log("Banco de Dados Mongo conectado com sucesso"));
 
-// // Inicializa o servidor
+// Configura o arquivo de rotas
+app.use(routes);
+
+// Inicializa o servidor
 app.listen(port);

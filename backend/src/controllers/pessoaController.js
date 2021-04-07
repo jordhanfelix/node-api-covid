@@ -1,9 +1,10 @@
 const pessoaModel = require('../models/pessoa');
+const Unidade = require('../models/unidade');
 
 module.exports = {
 
     // Adicionar uma nova pessoa
-    async adicionarPessoa(request, response) {
+    async create(request, response) {
 
         const {
             nome,
@@ -13,15 +14,25 @@ module.exports = {
             grupo_prioritario,
             endereco_pessoa,
             email_pessoa,
+            unidade
         } = request.body;
 
+        const {
+            _id,
+            nome_unidade,
+            descricao_unidade,
+            endereco_unidade,
+            telefone_unidade,
+            email_unidade,
+            latlong_unidade
+        } = await Unidade.findById(unidade);
         // Recuperar todas as pessoas cadastradas no banco
         pessoaModel.find((err, pessoas) => {
             if (err) {
-                console.log("Não foi possível recuperar as pessoas!");
+                console.log("Erro ao recuperars pessoas!");
                 response.json({
                     status: "erro",
-                    message: "Não foi possível recuperar as pessoas e portanto inserir uma nova pessoa!"
+                    message: "Erro ao recuperars pessoas e portanto inserir uma nova pessoa!"
                 });
             }
 
@@ -45,13 +56,25 @@ module.exports = {
                 grupo_prioritario,
                 endereco_pessoa,
                 email_pessoa,
+                unidade: {
+                    _id,
+                    nome_unidade,
+                    descricao_unidade,
+                    endereco_unidade,
+                    telefone_unidade,
+                    email_unidade,
+                    latlong_unidade
+                }
             });
+
+            
+            console.log(pessoa)
 
             pessoa.save((erro) => {
                 if (erro) {
                     response.send({
                         status: "erro",
-                        message: "Não foi possível inserir pessoa."
+                        message: `Não foi possível inserir pessoa. ${erro}`
                     });
                 } else {
                     response.send({
@@ -64,34 +87,30 @@ module.exports = {
     },
 
     // Listar pessoas
-    async listarPessoas(request, response) {
-        pessoaModel.find(function (err, pessoas) {
-            if (err) {
-                console.log("Não foi possível recuperar as pessoas!");
-                response.json({
-                    status: "erro",
-                    message: "Não foi possível recuperar as pessoas!"
-                });
-            } else {
-                response.json({
-                    status: "ok",
-                    pessoas: pessoas
-                });
-            }
+    async list(request, response) {
 
-        });
+
+        try {
+            const pessoas = await pessoaModel.find().populate(['pessoa', 'unidade']);
+
+            return response.send({ pessoas });
+
+        } catch (err) {
+            return response.status(400).send({ error: 'Erro ao listar Pessoa(s)!' });
+        }
+
     },
 
     // Obter pessoa por id
-    async listarPessoaPorID(request, response) {
-        let id_pessoa = request.query.id;
+    async show(request, response) {
+        const { id } = request.params;
 
-        pessoaModel.findById(id_pessoa, function (err, pessoa) {
+        pessoaModel.findById(id, function (err, pessoa) {
             if (err || !pessoa) {
-                console.log(`Não foi possivel recuperar a pessoa de id: ${id_pessoa}`);
+                console.log(`Erro ao recuperar pessoa de id: ${id}`);
                 response.json({
                     status: "erro",
-                    message: `Não foi possivel recuperar a pessoa de id: ${id_pessoa}`
+                    message: `Erro ao recuperar pessoa de id: ${id}`
                 });
             } else {
                 response.json({
@@ -104,15 +123,15 @@ module.exports = {
     },
 
     // Editar uma pessoa
-    async atualizarPessoa(request, response) {
-        let id_pessoa = request.query.id;
+    async update(request, response) {
+        const { id } = request.params;
 
-        pessoaModel.findById(id_pessoa, (erro, pessoa) => {
+        pessoaModel.findById(id, (erro, pessoa) => {
             if (erro || !pessoa) {
-                console.log("Não foi possível recuperar a pessoa!");
+                console.log("Erro ao recuperar pessoa!");
                 response.json({
                     status: "erro",
-                    message: `Não foi possível recuperar a pessoa de id ${id_pessoa} para atualização`
+                    message: `Erro ao recuperar pessoa de id ${id} para atualização`
                 });
             } else {
 
@@ -155,21 +174,21 @@ module.exports = {
     },
 
     // Remover pessoa
-    async removerPessoa(request, response) {
-        let id_pessoa = request.query.id;
+    async delete(request, response) {
+        const { id } = request.params;
 
         pessoaModel.deleteOne({
-            _id: id_pessoa
+            _id: id
         }, (err) => {
             if (err) {
                 response.json({
                     status: "erro",
-                    message: "Houve um erro ao deletar pessoa"
+                    message: "Erro ao deletar pessoa"
                 });
             } else {
                 response.json({
                     status: "ok",
-                    message: `Pessoa deletado com sucesso!`
+                    message: `Pessoa deletada com sucesso!`
                 });
             }
         });

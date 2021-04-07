@@ -3,32 +3,32 @@ const agendamentoModel = require('../models/agendamento');
 module.exports = {
 
     // Adicionar um novo agendamento
-    async adicionar(request, response) {
+    async create(request, response) {
 
         const {
             data_hora_agendamento,
             necessidades_especiais,
             observacoes_agendamento,
             pessoa,
-            //unidadeSaude,
+            unidae,
         } = request.body;
 
-        // Recuperar todas os agendamentos cadastradas no banco
+        // busca agendamento
         agendamentoModel.find((err, agendamentos) => {
             if (err) {
-                console.log("Não foi possível recuperar os agendamentos!");
+                console.log("Erro ao recuperar agendamento");
                 response.json({
                     status: "erro",
-                    message: "Não foi possível recuperar os agendamentos e portanto inserir um novo agendamento!"
+                    message: "Erro ao recuperar agendamento"
                 });
             }
 
-            // Verificar se ja existe um agendamento cadastrado para a mesma pessoa
+            // Procura por agendamento no memso usuario
             agendamentos.map(item => {
                 if (pessoa === item.pessoa) {
                     response.json({
                         status: "erro",
-                        message: `Já existe um agendamento para essa pessoa`
+                        message: `Pessoa já possui um agendamento cadastrado`
                     });
                     return;
                 }
@@ -36,13 +36,12 @@ module.exports = {
 
             var data = new Date(data_hora_agendamento);
 
-            // Cadastrar agendamento
+            // Cria novo agendamento
             let agendamento = new agendamentoModel({
                 data_hora_agendamento: data,
                 necessidades_especiais,
                 observacoes_agendamento,
                 pessoa,
-                //unidadeSaude,
             });
 
             agendamento.save((erro) => {
@@ -54,7 +53,7 @@ module.exports = {
                 } else {
                     response.send({
                         status: "ok",
-                        message: `Agendamento inserido com sucesso!`
+                        message: `Agendamento cadastrado com sucesso!`
                     });
                 }
             });
@@ -62,13 +61,13 @@ module.exports = {
     },
 
     // Listar agendamentos
-    async listar(request, response) {
+    async list(request, response) {
         agendamentoModel.find(function (err, agendamentos) {
             if (err) {
-                console.log("Não foi possível recuperar os agendamentos!");
+                console.log("Erro ao recuperar os agendamentos!");
                 response.json({
                     status: "erro",
-                    message: "Não foi possível recuperar os agendamentos!"
+                    message: "Erro ao recuperar os agendamentos!"
                 });
             } else {
                 response.json({
@@ -81,15 +80,15 @@ module.exports = {
     },
 
     // Obter agendamento por id
-    async listarPorID(request, response) {
-        let id_agendamento = request.query.id;
+    async show(request, response) {
+        const { id } = request.params;
 
-        agendamentoModel.findById(id_agendamento, function (err, agendamento) {
+        agendamentoModel.findById(id, function (err, agendamento) {
             if (err || !agendamento) {
-                console.log(`Não foi possivel recuperar o agendamento de id: ${id_agendamento}`);
+                console.log(`Erro ao recuperar agendamento de id: ${id}`);
                 response.json({
                     status: "erro",
-                    message: `Não foi possivel recuperar o agendamento de id: ${id_agendamento}`
+                    message: `Erro ao recuperar agendamento de id: ${id}`
                 });
             } else {
                 response.json({
@@ -102,39 +101,34 @@ module.exports = {
     },
 
     // Editar um agendamento
-    async atualizar(request, response) {
-        let id_pessoa = request.query.id;
+    async update(request, response) {
+        const { id } = request.params;
 
-        agendamentoModel.findById(id_pessoa, (erro, pessoa) => {
-            if (erro || !pessoa) {
-                console.log("Não foi possível recuperar a pessoa!");
+        agendamentoModel.findById(id, (erro, agendamento) => {
+            if (erro || !agendamento) {
+                console.log("Erro ao recuperar agendamento!");
                 response.json({
                     status: "erro",
-                    message: `Não foi possível recuperar a pessoa de id ${id_pessoa} para atualização`
+                    message: `Erro ao recuperar agendamento de id ${id} para atualização`
                 });
             } else {
 
                 const {
-                    nome,
-                    cpf_pessoa,
-                    data_nascimento,
-                    telefone_pessoa,
-                    grupo_prioritario,
-                    endereco_pessoa,
-                    email_pessoa,
+                    data_hora_agendamento,
+                    necessidades_especiais,
+                    observacoes_agendamento,
+                    pessoa,
                 } = request.body;
 
-                pessoa.nome = nome;
-                pessoa.cpf_pessoa = cpf_pessoa;
-                pessoa.data_nascimento = data_nascimento;
-                pessoa.telefone_pessoa = telefone_pessoa;
-                pessoa.grupo_prioritario = grupo_prioritario;
-                pessoa.endereco_pessoa = endereco_pessoa;
-                pessoa.email_pessoa = email_pessoa;
+                agendamento.data_hora_agendamento = data_hora_agendamento;
+                agendamento.necessidades_especiais = necessidades_especiais;
+                agendamento.observacoes_agendamento = observacoes_agendamento;
+                agendamento.telefone_agendamento = telefone_agendamento;
+                agendamento.pessoa = pessoa;
 
-                console.log(pessoa);
+                console.log(agendamento);
 
-                pessoa.save((err => {
+                agendamento.save((err => {
                     if (err) {
                         response.json({
                             status: "erro",
@@ -143,8 +137,8 @@ module.exports = {
                     } else {
                         response.json({
                             status: "ok",
-                            message: `Pessoa ${pessoa.nome} atualizada com sucesso!`,
-                            novaPessoa: pessoa
+                            message: `agendamento ${agendamento.nome} atualizado com sucesso!`,
+                            novoagendamento: agendamento
                         });
                     }
                 }));
@@ -153,16 +147,16 @@ module.exports = {
     },
 
     // Remover agendamento
-    async remover(request, response) {
-        let id_agendamento = request.query.id;
+    async delete(request, response) {
+        const { id } = request.params;
 
         agendamentoModel.deleteOne({
-            _id: id_agendamento
+            _id: id
         }, (err) => {
             if (err) {
                 response.json({
                     status: "erro",
-                    message: "Houve um erro ao deletar agendamento"
+                    message: "Erro ao deletar agendamento"
                 });
             } else {
                 response.json({

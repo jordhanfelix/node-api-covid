@@ -18,6 +18,11 @@ const agendamentoSchema = mongoose.Schema({
         ref: "pessoa",
         required: true
     },
+    unidade: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'unidade',
+        required: true
+    }
 });
 
 let Agendamento = module.exports = mongoose.model('agendamento', agendamentoSchema);
