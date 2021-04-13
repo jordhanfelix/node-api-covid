@@ -27,14 +27,16 @@ module.exports = {
         latlong_unidade,
       });
 
-      await Promise.all(pessoas.map(async pessoa => {
-        
-        const pessoaUnidade = new Pessoa({ ...pessoa, unidade: unidade._id });
+      if (pessoas) {
+        await Promise.all(pessoas.map(async pessoa => {
 
-        await pessoaUnidade.save();
+          const pessoaUnidade = new Pessoa({ ...pessoa, unidade: unidade._id });
 
-        unidade.pessoas.push(pessoaUnidade);
-      }));
+          await pessoaUnidade.save();
+
+          unidade.pessoas.push(pessoaUnidade);
+        }));
+      }
 
       await unidade.save();
 
@@ -91,7 +93,7 @@ module.exports = {
         endereco_unidade,
         telefone_unidade,
         email_unidade,
-        latlong_unidade,
+        latlong_unidade
       }, { new: true });
 
       //Primeiro deletar todas as pessoas associadas a unidade

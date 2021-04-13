@@ -91,7 +91,7 @@ module.exports = {
 
 
         try {
-            const pessoas = await pessoaModel.find().populate(['pessoa', 'unidade']);
+            const pessoas = await pessoaModel.find().populate(['unidade']);
 
             return response.send({ pessoas });
 
@@ -103,23 +103,15 @@ module.exports = {
 
     // Obter pessoa por id
     async show(request, response) {
-        const { id } = request.params;
-
-        pessoaModel.findById(id, function (err, pessoa) {
-            if (err || !pessoa) {
-                console.log(`Erro ao recuperar pessoa de id: ${id}`);
-                response.json({
-                    status: "erro",
-                    message: `Erro ao recuperar pessoa de id: ${id}`
-                });
-            } else {
-                response.json({
-                    status: "ok",
-                    pessoa: pessoa
-                });
-            }
-
-        });
+       
+        try {
+            const pessoa = await pessoaModel.findById(request.params.id).populate(['unidade']);
+      
+            return response.send({ pessoa });
+      
+          } catch (err) {
+            return response.status(400).send({ error: 'Erro ao listar pessoa!' });
+          }
     },
 
     // Editar uma pessoa

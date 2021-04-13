@@ -1,5 +1,6 @@
 const agendamentoModel = require('../models/agendamento');
-
+const Unidade = require('../models/unidade');
+const Pessoa = require('../models/pessoa');
 module.exports = {
 
     // Adicionar um novo agendamento
@@ -10,9 +11,11 @@ module.exports = {
             necessidades_especiais,
             observacoes_agendamento,
             pessoa,
-            unidae,
+            unidade,
         } = request.body;
 
+        const pessoaRecuperada = Pessoa.findById(pessoa);
+        const unidadeRecuperada = Unidade.findById(unidade);
         // busca agendamento
         agendamentoModel.find((err, agendamentos) => {
             if (err) {
@@ -21,6 +24,13 @@ module.exports = {
                     status: "erro",
                     message: "Erro ao recuperar agendamento"
                 });
+            }
+            if (!pessoaRecuperada || !unidadeRecuperada) {
+                response.json({
+                    status: "erro",
+                    message: `Não foi possivel encontrar Pessoa ou Unidade informada`
+                });
+                return;
             }
 
             // Procura por agendamento no memso usuario
@@ -42,6 +52,7 @@ module.exports = {
                 necessidades_especiais,
                 observacoes_agendamento,
                 pessoa,
+                unidade
             });
 
             agendamento.save((erro) => {
@@ -62,21 +73,16 @@ module.exports = {
 
     // Listar agendamentos
     async list(request, response) {
-        agendamentoModel.find(function (err, agendamentos) {
-            if (err) {
-                console.log("Erro ao recuperar os agendamentos!");
-                response.json({
-                    status: "erro",
-                    message: "Erro ao recuperar os agendamentos!"
-                });
-            } else {
-                response.json({
-                    status: "ok",
-                    agendamentos: agendamentos
-                });
-            }
 
-        }).populate('pessoa');
+
+        try {
+            const agendamentos = await agendamentoModel.find().populate(['pessoa', 'unidade']);
+
+            return response.send({ agendamentos });
+
+        } catch (err) {
+            return response.status(400).send({ error: 'Erro ao listar Agendamentos(s)!' });
+        }
     },
 
     // Obter agendamento por id
@@ -91,13 +97,19 @@ module.exports = {
                     message: `Erro ao recuperar agendamento de id: ${id}`
                 });
             } else {
+
+                const pessoaRecuperada = Pessoa.findById(agendamento.pessoa);
+                const unidadeRecuperada = Unidade.findById(agendamento.unidade);
+
+                agendamento.pessoa = pessoaRecuperada;
+                agendamento.unidade = unidadeRecuperada;
+
                 response.json({
-                    status: "ok",
                     agendamento: agendamento
                 });
             }
 
-        }).populate('pessoa');
+        });
     },
 
     // Editar um agendamento
@@ -118,6 +130,7 @@ module.exports = {
                     necessidades_especiais,
                     observacoes_agendamento,
                     pessoa,
+                    unidade,
                 } = request.body;
 
                 agendamento.data_hora_agendamento = data_hora_agendamento;
@@ -125,8 +138,7 @@ module.exports = {
                 agendamento.observacoes_agendamento = observacoes_agendamento;
                 agendamento.telefone_agendamento = telefone_agendamento;
                 agendamento.pessoa = pessoa;
-
-                console.log(agendamento);
+                agendamento.unidade = unidade;
 
                 agendamento.save((err => {
                     if (err) {
@@ -150,6 +162,18 @@ module.exports = {
     async delete(request, response) {
         const { id } = request.params;
 
+        const agendamento = await agendamentoModel.findById(id);
+
+        //Se encontrar agendamento deleta unidade e pessoa;
+        if (!agendamento) {
+            const pessoaRecuperada = await Pessoa.findById(agendamentoModel.pessoa);
+            const unidadeRecuperada = await Unidade.findById(agendamentoModel.unidade);
+
+            await pessoaRecuperada.deleteOne({ _id: agendamento.pessoa });
+            await unidadeRecuperada.deleteOne({ _id: agendamento.unidade_saude });
+        }
+
+        //Por ultimo deleta agendamento
         agendamentoModel.deleteOne({
             _id: id
         }, (err) => {
