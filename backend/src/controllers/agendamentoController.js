@@ -165,7 +165,7 @@ module.exports = {
         const agendamento = await agendamentoModel.findById(id);
 
         //Se encontrar agendamento deleta unidade e pessoa;
-        if (!agendamento) {
+        if (agendamento) {
             const pessoaRecuperada = await Pessoa.findById(agendamentoModel.pessoa);
             const unidadeRecuperada = await Unidade.findById(agendamentoModel.unidade);
 
