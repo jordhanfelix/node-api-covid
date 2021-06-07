@@ -2,7 +2,7 @@
  
 ## Projeto 
 
-Api de agendamento em unidades de saude desenvolvida como metodo avaliativo da disciplina de desenvolvimento web II do professor [Otavio](https://github.com/otaviolube)
+Api de agendamento em unidades de saude desenvolvida como metodo avaliativo da disciplina de desenvolvimento web II. Aplicada pelo professor [Otavio](https://github.com/otaviolube)
 
 ## Technologia utilizada 
 
