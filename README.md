@@ -1,14 +1,9 @@
-# node-api-covid
+# Projeto avaliativo Desenvolvimento Web II
+ 
+## Projeto 
 
-![Logo of the project](https://raw.githubusercontent.com/JordhanFelix/node-api-covid/master/repo-config/logo.png)
- 
-## NODE API COVID
- 
-![DESCICAO](https://raw.githubusercontent.com/JordhanFelix/node-api-covid/master/repo-config/transferir.png)
+Api de agendamento em unidades de saude desenvolvida como metodo avaliativo da disciplina de desenvolvimento web II do professor [Otavio](https://github.com/otaviolube)
 
- 
- 
- 
 ## Technologia utilizada 
 
 * Node 
