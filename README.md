@@ -4,6 +4,11 @@
 
 Api de agendamento em unidades de saude desenvolvida como metodo avaliativo da disciplina de desenvolvimento web II. Aplicada pelo professor [Otavio](https://github.com/otaviolube)
 
+## Branchs do projeto
+
+* [C1](https://github.com/JordhanFelix/node-api-covid/tree/c1) Primeira avaliação
+* C2 Segunda avaliação
+
 ## Technologia utilizada 
 
 * Node 
