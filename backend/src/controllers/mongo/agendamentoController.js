@@ -1,6 +1,6 @@
-const agendamentoModel = require('../models/agendamento');
-const Unidade = require('../models/unidade');
-const Pessoa = require('../models/pessoa');
+const agendamentoModel = require('../../models/mongo/agendamento');
+const Unidade = require('../../models/mongo/unidade');
+const Pessoa = require('../../models/mongo/pessoa');
 module.exports = {
 
     // Adicionar um novo agendamento

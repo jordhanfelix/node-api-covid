@@ -1,5 +1,5 @@
-const unidadeModel = require('../models/unidade');
-const Pessoa = require('../models/pessoa');
+const unidadeModel = require('../../models/mongo/unidade');
+const Pessoa = require('../../models/mongo/pessoa');
 
 module.exports = {
 

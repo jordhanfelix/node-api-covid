@@ -2,54 +2,54 @@ version: '3.1'
 
 services:
 
- # * Criando serviços do banco de dados
+  # * Criando serviços do banco de dados
+  db:
+    image: postgres
+    restart: always
+    container_name: postgres-trabalho-c2
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: faesa123
+    networks: 
+      - rede-trabalho-c2
+
   mongodb:
     image: mongo
     restart: always
-    container_name: mongo-trabalho-c1
+    container_name: mongo-trabalho-c2
     ports: 
       - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: faesa123
     networks: 
-      - rede-trabalho-c1
+      - rede-trabalho-c2
 
-  # Craindo MongoExpress
-  mongo-express:
-    image: mongo-express
-    restart: always
-    container_name: mongo-express-trabalho-c1
-    networks:
-      - rede-trabalho-c1
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: faesa123
-      ME_CONFIG_MONGODB_SERVER: mongo-trabalho-c1
-    depends_on:
-      - mongodb
-
-      # * backend
-  backend:
+  # * Criando backend
+  api:
     build:
-      # dockerfile: ./Dockerfile
-      context: ./backend
+      #dockerfile: ./Dockerfile
+      context: ./backend/
     volumes:
       - './backend:/usr/app/'
       - './backend/package.json:/usr/app/package.json'
       - './backend/yarn.lock:/usr/app/yarn.lock'
     #image: node
-    container_name: trabalho-c1-backend
+    container_name: trabalho-c2-backend
     ports:
       - "3000:3000"
     networks: 
-      - rede-trabalho-c1
+      - rede-trabalho-c2
     depends_on: 
+      - "db"
       - "mongodb"
-
+    env_file:
+      - ./backend/.env.development
+    command: >
+      sh -c "yarn sequelize db:migrate && yarn start"
 # * Criando rede
 networks:
-  rede-trabalho-c1:
+  rede-trabalho-c2:
     driver: bridge

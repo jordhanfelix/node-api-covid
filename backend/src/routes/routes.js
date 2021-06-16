@@ -1,30 +1,24 @@
 const {Router} = require('express');
 const routes = Router();
 
-const agendamentoController = require('../controllers/agendamentoController');
-const pessoaController = require('../controllers/pessoaController');
-const unidadecontroller = require('../controllers/unidadecontroller');
- 
-//Agendamento
-routes.get('/agendamento', agendamentoController.list);//todos
-routes.get('/agendamento/:id', agendamentoController.show);//busca por id
-routes.put('/agendamento/:id', agendamentoController.update);//atualiza
-routes.post('/agendamento', agendamentoController.create);//cadastra
-routes.delete('/agendamento/:id', agendamentoController.delete);//deleta
 
-//Pessoa
-routes.get('/pessoa', pessoaController.list);//todos
-routes.get('/pessoa/:id', pessoaController.show);//busca por id
-routes.put('/pessoa/:id', pessoaController.update);//atualiza
-routes.post('/pessoa', pessoaController.create);//cadastra
-routes.delete('/pessoa/:id', pessoaController.delete);//deleta
+const pessoaMongo = require('./mongo/pessoa');
+const agendamentoMongo = require('./mongo/agendamento');
+const unidadeMongo = require('./mongo/unidade');
 
-//Unidade
-routes.get('/unidade', unidadecontroller.list);//todos
-routes.get('/unidade/:id', unidadecontroller.show);//busca por id
-routes.put('/unidade/:id', unidadecontroller.update);//atualiza
-routes.post('/unidade', unidadecontroller.create);//cadastra
-routes.delete('/unidade/:id', unidadecontroller.delete);//deleta
+const pessoaPostgres = require('./postgres/pessoa');
+const agendamentoPostgres = require('./postgres/agendamento');
+const unidadePostgres = require('./postgres/unidade');
+
+//mongo
+routes.use('/api/mg-pessoa', pessoaMongo);
+routes.use('/api/mg-agendamento', agendamentoMongo);
+routes.use('/api/mg-unidadeSaude', unidadeMongo);
+
+//postgress 
+routes.use('/api/pg-pessoa', pessoaPostgres);
+routes.use('/api/pg-agendamento', agendamentoPostgres);
+routes.use('/api/pg-unidadeSaude', unidadePostgres);
 
 
 module.exports = routes;

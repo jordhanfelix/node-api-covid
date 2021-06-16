@@ -1,31 +1,33 @@
+require('dotenv').config({
+  path: process.env.NODE_ENV === "development" ? ".env.development" : ".env"
+});
+
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
 const routes = require('./routes/routes')
 
-const port = 3000;
+const port = process.env.APP_PORT;
 
-app.use(bodyParser.json());
+require('./infra');
 
-app.use(bodyParser.urlencoded({
-  extended: false
+app.use(express.urlencoded({
+    extended: true
 }));
 
-// criando banco com o nome: mongo-trabalho-web
-mongoose.connect(
-  `mongodb://root:faesa123@mongo-trabalho-c1:27017/devwebII?authSource=admin`,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+app.use(express.json());
 
-mongoose.connection.on('error', console.error.bind(console, 'Erro ao conectar no Mongo'));
-mongoose.connection.once('open', () => console.log("Banco de Dados Mongo conectado com sucesso"));
+const strConnection = process.env.NODE_ENV === 'development' ?
+  `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin` :
+  `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}.wbhls.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
 
-// Configura o arquivo de rotas
+mongoose.connect(strConnection, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'Erro ao conectar no Mongo'));
+db.once('open', () => console.log("Banco de Dados Mongo conectado com sucesso"));
+
 app.use(routes);
-
-// Inicializa o servidor
 app.listen(port);
