@@ -7,7 +7,7 @@ Api de agendamento em unidades de saude desenvolvida como metodo avaliativo da d
 ## Branchs do projeto
 
 * [C1](https://github.com/JordhanFelix/node-api-covid/tree/c1) Primeira avaliação
-* C2 Segunda avaliação
+* [C2](https://github.com/JordhanFelix/node-api-covid/tree/c2) Segunda avaliação
 
 ## Technologia utilizada 
 
