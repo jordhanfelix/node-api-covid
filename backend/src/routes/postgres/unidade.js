@@ -4,7 +4,7 @@ const routes = Router();
 
 const UnidadeSaudeController = require('../../controllers/postgres/UnidadeSaudeController');
 
-routes.post('/store', UnidadeSaudeController.store);
+routes.post('/create', UnidadeSaudeController.store);
 routes.get('/', UnidadeSaudeController.getAll);
 routes.get('/:id', UnidadeSaudeController.getById);
 routes.put('/:id', UnidadeSaudeController.update);

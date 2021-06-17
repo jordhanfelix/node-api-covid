@@ -4,7 +4,7 @@ const routes = Router();
 
 const PessoaController = require('../../controllers/postgres/PessoaController');
 
-routes.post('/store', PessoaController.store);
+routes.post('/create', PessoaController.store);
 routes.get('/', PessoaController.getAll);
 routes.get('/:id', PessoaController.getById);
 routes.put('/:id', PessoaController.update);

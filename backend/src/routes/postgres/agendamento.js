@@ -4,7 +4,7 @@ const routes = Router();
 
 const AgendamentoController = require('../../controllers/postgres/AgendamentoController');
 
-routes.post('/store', AgendamentoController.store);
+routes.post('/create', AgendamentoController.store);
 routes.get('/', AgendamentoController.getAll);
 routes.get('/:id', AgendamentoController.getById);
 routes.put('/:id', AgendamentoController.update);

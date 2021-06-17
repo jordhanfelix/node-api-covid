@@ -20,11 +20,12 @@ app.use(express.json());
 
 const strConnection = process.env.NODE_ENV === 'development' ?
   `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin` :
-  `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}.wbhls.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
-
+  `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}.zexpm.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
 mongoose.connect(strConnection, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
+
+console.log(port)
 
 db.on('error', console.error.bind(console, 'Erro ao conectar no Mongo'));
 db.once('open', () => console.log("Banco de Dados Mongo conectado com sucesso"));

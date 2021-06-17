@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const routes = Router();
-const pessoaController = require('../../controllers/pessoaController');
+const pessoaController = require('../../controllers/mongo/pessoaController');
 
 //Pessoa
 routes.get('/', pessoaController.list);//todos
