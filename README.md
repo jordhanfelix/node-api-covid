@@ -25,6 +25,7 @@ Api de agendamento em unidades de saude desenvolvida como metodo avaliativo da d
  
 * Após rodar os comandos o servidor fica disponivel na porta http://localhost:3000
 
+-- Api hospedada neste endereço: https://3.129.22.233:3000
 
 ## Iniciando
  
