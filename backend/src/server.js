@@ -2,33 +2,34 @@ require('dotenv').config({
   path: process.env.NODE_ENV === "development" ? ".env.development" : ".env"
 });
 
-const express = require('express');
-const app = express();
-
 const mongoose = require('mongoose');
 const routes = require('./routes/routes')
-
-const port = process.env.APP_PORT;
-
+const cors = require('cors')
+const express = require('express');
 require('./infra');
+
+
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200
+}
+
+const app = express();
+
+app.use(cors());
 
 app.use(express.urlencoded({
     extended: true
 }));
 
+
+
 app.use(express.json());
 
-const strConnection = process.env.NODE_ENV === 'development' ?
-  `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin` :
-  `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}.zexpm.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
-mongoose.connect(strConnection, { useNewUrlParser: true, useUnifiedTopology: true });
-
-const db = mongoose.connection;
-
-console.log(port)
-
-db.on('error', console.error.bind(console, 'Erro ao conectar no Mongo'));
-db.once('open', () => console.log("Banco de Dados Mongo conectado com sucesso"));
-
 app.use(routes);
-app.listen(port);
+
+app.listen(3333);
+
+
+
+app.use(cors(corsOptions))

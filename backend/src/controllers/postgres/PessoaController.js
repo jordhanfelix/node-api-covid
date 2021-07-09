@@ -27,6 +27,7 @@ module.exports = {
       grupo_prioritario,
       endereco,
       email,
+      password,
       unidade_saude_id } = req.body;
 
     if (unidade_saude_id) {
@@ -49,6 +50,7 @@ module.exports = {
         grupo_prioritario,
         endereco,
         telefone,
+        password,
         unidade_saude_id
       });
 
@@ -103,6 +105,7 @@ module.exports = {
           grupo_prioritario,
           endereco,
           telefone,
+          password,
           unidade_saude_id
         },
           { where: { id: id } });
