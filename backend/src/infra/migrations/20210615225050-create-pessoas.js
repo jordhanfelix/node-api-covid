@@ -45,7 +45,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      assword: {
+      password: {
         type: Sequelize.STRING,
         allowNull: false
       },

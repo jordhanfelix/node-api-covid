@@ -36,11 +36,24 @@ module.exports = {
       if (!unidadeSaude) {
         return res.status(400).json({ erro: 'Erro ao localizar unidade de saúde' })
       }
-    } else {
-      return response.status(404).json({ erro: 'Unidade de saúde não informada' });
     }
 
     try {
+      if (unidade_saude_id){
+        const pessoa = await Pessoa.create({
+
+          cpf,
+          data_nascimento,
+          nome,
+          email,
+          grupo_prioritario,
+          endereco,
+          telefone,
+          password,
+          unidade_saude_id
+        });
+    }else{
+
       const pessoa = await Pessoa.create({
 
         cpf,
@@ -50,9 +63,10 @@ module.exports = {
         grupo_prioritario,
         endereco,
         telefone,
-        password,
-        unidade_saude_id
+        password
+
       });
+    }
 
       return res.json(pessoa);
 
